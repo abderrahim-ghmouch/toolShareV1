@@ -1,0 +1,149 @@
+### ============================================================
+###  TOOLSHARE — API HTTP Requests (REST Client for VS Code)
+###  Remplacez les valeurs entre {{variables}} selon votre besoin
+### ============================================================
+
+### ---------------------------
+###  Installation
+### ---------------------------
+
+### Vérifier l'état de l'installation
+GET http://localhost:3000/api/installation/status
+
+### Installer l'application (premier admin)
+POST http://localhost:3000/api/installation/install
+
+### ---------------------------
+###  Authentification
+### ---------------------------
+    
+### Connexion — récupérer un token
+# @name login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "albertcamus@gmail.com",
+    "password": "qwert1234"
+}
+
+### ---------------------------
+###  Variables globales
+###  Copiez votre token ici après connexion
+### ---------------------------
+
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWY1ZGI2ODlhYTZjZTRhNDQzZTM0MzYiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3OTQ4NDEzNzcsImV4cCI6MTc5NDkyNzc3N30.l-lII5vyR5NljoJXSep90472--E92YFvjojUT3UgOSs
+@storeId =6afb1db82f4f460461b6addb
+@userId =
+@managerId =6afb1f262f4f460461b6addd
+
+### ---------------------------
+###  Utilisateurs (admin only)
+### ---------------------------
+
+### Lister tous les utilisateurs
+GET http://localhost:3000/api/users
+Authorization: Bearer {{token}}
+
+### Créer un utilisateur
+POST http://localhost:3000/api/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "sismail",
+    "email": "jean@gmail.com",
+    "role": "user",
+    "password": "motdepasse123"
+}
+
+### ---------------------------
+###  Magasins (auth requis)
+### ---------------------------
+
+### Lister les magasins
+GET http://localhost:3000/api/stores
+Authorization: Bearer {{token}}
+
+### Détails d'un magasin
+GET http://localhost:3000/api/stores/{{storeId}}
+Authorization: Bearer {{token}}
+
+### Créer un magasin (admin only)
+POST http://localhost:3000/api/stores
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Magasin b",
+    "location": "rabat"
+}
+
+### Modifier un magasin (admin only)
+PATCH http://localhost:3000/api/stores/{{storeId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Magasin A "
+}
+
+### Désactiver un magasin (admin only)
+PATCH http://localhost:3000/api/stores/{{storeId}}/deactivate
+Authorization: Bearer {{token}}
+
+### Réactiver un magasin (admin only)
+PATCH http://localhost:3000/api/stores/{{storeId}}/activate
+Authorization: Bearer {{token}}
+
+### ---------------------------
+###  Gestionnaires (admin only)
+### ---------------------------
+
+### Créer un gestionnaire
+POST http://localhost:3000/api/managers
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "abderrahim ghmouch",
+    "email": "abderrahin@gmail.com",
+    "password": "qwert9822",
+    "storeId": "{{storeId}}"
+}
+
+### Affecter un gestionnaire à un magasin
+PATCH http://localhost:3000/api/managers/{{managerId}}/store
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "storeId": "{{storeId}}"
+}
+
+### ---------------------------
+###  Profil (utilisateur connecté)
+### ---------------------------
+
+### Voir mon profil
+GET http://localhost:3000/api/me
+Authorization: Bearer {{token}}
+
+### Modifier mon profil
+PATCH http://localhost:3000/api/me
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "albert"
+}
+
+### Changer mon mot de passe
+PATCH http://localhost:3000/api/me/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "currentPassword": "ancien_mot_de_passe",
+    "newPassword": "nouveau_mot_de_passe"
+}

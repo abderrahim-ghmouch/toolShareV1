@@ -1,0 +1,68 @@
+import mongoose from "mongoose"
+
+const userSchema = new mongoose.Schema({
+
+    name: {
+        type: String,
+        
+        required: true,
+        
+    },
+    email: {
+        
+        type: String,
+
+        required: true,
+        unique: true,
+        
+        trim: true,
+
+        validate:{
+            validator: function (value) {
+                
+            return  value.includes('@')
+
+        }
+
+}
+    },
+    
+    password: {
+        type: String,
+        required: true,
+        select:false
+        
+    },
+
+    role: { 
+        
+        type: String,
+        
+        enum: ['admin', 'user','manager'],
+        default :'user'
+    },
+    assignedSites: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'site'
+        }],
+        default: []
+    }
+    ,
+    
+    store: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'store',
+        default: null
+    }
+    ,
+
+    active: {
+        type: Boolean,
+        default:true
+    }
+})
+
+const userModel = mongoose.model('user', userSchema)
+
+export default userModel
